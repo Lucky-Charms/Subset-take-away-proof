@@ -2,12 +2,13 @@ from itertools import combinations
 import math
 import random
 
-A = set(['a', 'b', 'c', 'd'])
+A = set(['a', 'b', 'c', 'd']) #Init 4 element set
+
 nonempty_subsets = set (combinations(A,1)).union(set(combinations(A,2))).union(set(combinations(A,3))).union(set(combinations(A,4)))
-maxMoves = int(math.pow(2, len(A)))
+maxMoves = int(math.pow(2, len(A))) # Get Max "possible" turns
 
 nonempty_subset_array = []
-fullSubset = None
+fullSubset = None 
 
 # Mapped subset into array
 for x in nonempty_subsets:
@@ -16,14 +17,16 @@ for x in nonempty_subsets:
     else:
         fullSubset = x
 
-nonempty_subsets.remove(fullSubset) # No player can pick this one.
+nonempty_subsets.remove(fullSubset) # No player can pick this one since it contains the full set.
 
+#Loggers
 playerOne_log = "Player One's Turn: Player one picked {}"
 playerTwo_log = "Player Two;s Turn: Player two picked {}"
 
-seenElements = []
-loser = None
+seenElements = [] # Track all element that have been seen
+loser = None # Track losers
 
+# Algorithm to determine if the set is the set that will make the game winnable.
 def winSelect(set):  
     elementsNeededToWin = ['a', 'b', 'c', 'd']
     elementsNeededToWin = list(map(lambda x: x if x not in seenElements else None, elementsNeededToWin))
@@ -39,7 +42,7 @@ def winSelect(set):
     else:
         return False
     
-
+#Iterate through the max turns
 for t in range(maxMoves, 0, -1):
     # Iterate through each turn
     if (t == maxMoves):
@@ -50,8 +53,8 @@ for t in range(maxMoves, 0, -1):
             seenElements.append(e)
         nonempty_subsets.remove(nonempty_subset_array[randomIndex]) # Remove from subset
         nonempty_subset_array.pop(randomIndex) # Remove from array
-        print(seenElements)
-        
+        #print(seenElements)
+
     else:
         # Iterate through the available set for any set that is pickable.
         playerSelect = None
@@ -63,6 +66,7 @@ for t in range(maxMoves, 0, -1):
 
         # No possible moves.
         if (playerSelect == None):
+            print("No other legal moves!")
             if (t % 2 == 0):
                 loser = "Player One Loses!"
             else:
@@ -76,4 +80,5 @@ for t in range(maxMoves, 0, -1):
             print(playerTwo_log.format(playerSelect))
 
 print(loser)
+
     
